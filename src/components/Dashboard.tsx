@@ -15,9 +15,9 @@ import { useTheme } from '../contexts/ThemeContext';
 import ApiStatus from './ApiStatus';
 
 interface ModelStats {
-  accuracy: number;
-  precision: number;
-  recall: number;
+  accuracy?: number;
+  precision?: number;
+  recall?: number;
   f1Score: number;
   totalTransactions: number;
   fraudDetected: number;
@@ -129,28 +129,28 @@ const Dashboard: React.FC = () => {
           <StatCard
             icon={Brain}
             title="Model Accuracy"
-            value={`${(stats?.accuracy * 100).toFixed(1)}%`}
+            value={stats?.accuracy ? `${(stats.accuracy * 100).toFixed(1)}%` : 'N/A'}
             subtitle="ML Performance"
             color="bg-blue-500"
           />
           <StatCard
             icon={Target}
             title="Precision"
-            value={`${(stats?.precision * 100).toFixed(1)}%`}
+            value={stats?.precision ? `${(stats.precision * 100).toFixed(1)}%` : 'N/A'}
             subtitle="True Positive Rate"
             color="bg-green-500"
           />
           <StatCard
             icon={Shield}
             title="Fraud Detected"
-            value={stats?.fraudDetected.toLocaleString()}
-            subtitle={`${stats?.totalTransactions.toLocaleString()} total transactions`}
+            value={stats?.fraudDetected.toLocaleString() ?? 'N/A'}
+            subtitle={stats?.totalTransactions ? `${stats.totalTransactions.toLocaleString()} total transactions` : 'N/A'}
             color="bg-red-500"
           />
           <StatCard
             icon={Zap}
             title="F1 Score"
-            value={stats?.f1Score.toFixed(3)}
+            value={stats?.f1Score.toFixed(3) ?? 'N/A'}
             subtitle="Harmonic Mean"
             color="bg-purple-500"
           />
@@ -288,12 +288,12 @@ const Dashboard: React.FC = () => {
                     fill="none"
                     stroke="#3b82f6"
                     strokeWidth="3"
-                    strokeDasharray={`${stats?.accuracy * 100}, 100`}
+                    strokeDasharray={stats?.accuracy ? `${stats.accuracy * 100}, 100` : '0, 100'}
                     className="transition-all duration-1000 ease-out"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-xl font-bold">{(stats?.accuracy * 100).toFixed(1)}%</span>
+                  <span className="text-xl font-bold">{stats?.accuracy ? (stats.accuracy * 100).toFixed(1) : 'N/A'}%</span>
                 </div>
               </div>
               <p className={`font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Accuracy</p>
@@ -313,12 +313,12 @@ const Dashboard: React.FC = () => {
                     fill="none"
                     stroke="#10b981"
                     strokeWidth="3"
-                    strokeDasharray={`${stats?.precision * 100}, 100`}
+                    strokeDasharray={stats?.precision ? `${stats.precision * 100}, 100` : '0, 100'}
                     className="transition-all duration-1000 ease-out"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-xl font-bold">{(stats?.precision * 100).toFixed(1)}%</span>
+                  <span className="text-xl font-bold">{stats?.precision ? (stats.precision * 100).toFixed(1) : 'N/A'}%</span>
                 </div>
               </div>
               <p className={`font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Precision</p>
@@ -338,12 +338,12 @@ const Dashboard: React.FC = () => {
                     fill="none"
                     stroke="#f59e0b"
                     strokeWidth="3"
-                    strokeDasharray={`${stats?.recall * 100}, 100`}
+                    strokeDasharray={stats?.recall ? `${stats.recall * 100}, 100` : '0, 100'}
                     className="transition-all duration-1000 ease-out"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-xl font-bold">{(stats?.recall * 100).toFixed(1)}%</span>
+                  <span className="text-xl font-bold">{stats?.recall ? (stats.recall * 100).toFixed(1) : 'N/A'}%</span>
                 </div>
               </div>
               <p className={`font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Recall</p>

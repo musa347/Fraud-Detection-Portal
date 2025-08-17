@@ -10,12 +10,17 @@ const ApiStatus: React.FC = () => {
 
   useEffect(() => {
     const checkApiStatus = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5-second timeout
+
       try {
         const response = await fetch('https://fraud-detection-backend-9ssq.onrender.com/api/model/stats', {
           method: 'GET',
-          timeout: 5000 as any
+          signal: controller.signal,
         });
-        
+
+        clearTimeout(timeoutId);
+
         if (response.status === 429) {
           setStatus('rate-limited');
         } else if (response.ok) {
@@ -29,13 +34,12 @@ const ApiStatus: React.FC = () => {
       setLastCheck(new Date());
     };
 
-    // Check immediately
     checkApiStatus();
-    
-    // Check every 30 seconds
     const interval = setInterval(checkApiStatus, 30000);
-    
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const getStatusConfig = () => {
@@ -47,7 +51,7 @@ const ApiStatus: React.FC = () => {
           bgColor: 'bg-green-100 dark:bg-green-900/30',
           borderColor: 'border-green-200 dark:border-green-700',
           text: 'API Online',
-          description: 'All systems operational'
+          description: 'All systems operational',
         };
       case 'rate-limited':
         return {
@@ -56,7 +60,7 @@ const ApiStatus: React.FC = () => {
           bgColor: 'bg-yellow-100 dark:bg-yellow-900/30',
           borderColor: 'border-yellow-200 dark:border-yellow-700',
           text: 'Rate Limited',
-          description: 'API experiencing high traffic'
+          description: 'API experiencing high traffic',
         };
       case 'offline':
         return {
@@ -65,7 +69,7 @@ const ApiStatus: React.FC = () => {
           bgColor: 'bg-red-100 dark:bg-red-900/30',
           borderColor: 'border-red-200 dark:border-red-700',
           text: 'API Offline',
-          description: 'Service temporarily unavailable'
+          description: 'Service temporarily unavailable',
         };
     }
   };

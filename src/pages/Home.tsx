@@ -35,7 +35,7 @@ export default function Home() {
         newbalanceDest: parseFloat(newbalanceDest),
       };
       const response = await checkFraud(transactionData);
-      console.log('API Response:', response); // Debug response
+      console.log('API Response:', response);
       setResult(response);
       if (response && typeof response.fraudProbability === 'number') {
         const newMessage = {
@@ -51,9 +51,10 @@ export default function Home() {
       } else {
         throw new Error('Invalid response format: fraud_probability is missing or not a number');
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Error:', error);
-      alert(`Failed to analyze transaction: ${error.message || 'Unknown error'}`);
+      alert(`Failed to analyze transaction: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
