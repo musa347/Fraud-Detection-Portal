@@ -1,43 +1,43 @@
-# 🛡️ FraudGuard AI - Advanced Fraud Detection Portal
+#  FraudGuard AI - Advanced Fraud Detection Portal
 
 A cutting-edge, AI-powered fraud detection portal built with React, TypeScript, and modern web technologies. This application provides real-time fraud analysis, comprehensive analytics, and machine learning insights to help detect and prevent fraudulent transactions.
 
-## ✨ Features
+##  Features
 
-### 🧠 AI-Powered Analysis
+###  AI-Powered Analysis
 - **Real-time ML Model Insights**: Advanced machine learning algorithms analyze transactions in real-time
 - **Confidence Scoring**: Each prediction comes with a confidence score
 - **Feature Importance**: Understand which factors contribute most to fraud detection
 - **Risk Level Classification**: Automatic categorization into LOW, MEDIUM, HIGH, and CRITICAL risk levels
 
-### 📊 Advanced Analytics Dashboard
+###  Advanced Analytics Dashboard
 - **Interactive Charts**: Multiple chart types including line, bar, pie, and scatter plots
 - **Transaction Trends**: Visualize fraud patterns over time
 - **Risk Distribution**: Comprehensive breakdown of risk levels
 - **Amount Analysis**: Fraud correlation with transaction amounts
 - **Type Analysis**: Fraud rates by transaction type
 
-### 🎨 Modern UI/UX
+###  Modern UI/UX
 - **Dark/Light Mode**: Toggle between themes with smooth transitions
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Smooth Animations**: Framer Motion powered animations and transitions
 - **Glass Morphism**: Modern glass-like UI elements
 - **Interactive Components**: Hover effects and micro-interactions
 
-### 🔍 Fraud Analyzer
+###  Fraud Analyzer
 - **Comprehensive Input Form**: Easy-to-use transaction input interface
 - **Real-time Results**: Instant fraud probability calculation
 - **AI Explanations**: Detailed explanations of why transactions are flagged
 - **Export Capabilities**: Download analysis results as JSON
 - **Analysis History**: Track recent fraud analyses
 
-### 📈 Dashboard Features
+###  Dashboard Features
 - **Model Performance Metrics**: Accuracy, Precision, Recall, F1-Score
 - **Live Transaction Monitoring**: Real-time transaction feed
 - **Statistical Overview**: Key performance indicators
 - **Circular Progress Indicators**: Visual representation of model performance
 
-## 🚀 Technology Stack
+## Technology Stack
 
 ### Frontend
 - **React 18** - Modern React with hooks and functional components
@@ -83,27 +83,27 @@ A cutting-edge, AI-powered fraud detection portal built with React, TypeScript, 
 
 ## 📱 Pages & Components
 
-### 🏠 Dashboard (`/`)
+###  Dashboard (`/`)
 - Model performance overview
 - Recent transaction analysis
 - Live monitoring feed
 - Key statistics and metrics
 
-### 🔍 Analyzer (`/analyzer`)
+###  Analyzer (`/analyzer`)
 - Transaction input form
 - Real-time fraud analysis
 - AI explanations and insights
 - Feature importance visualization
 - Export functionality
 
-### 📊 Analytics (`/charts`)
+###  Analytics (`/charts`)
 - Multiple chart types and visualizations
 - Time-based trend analysis
 - Risk distribution charts
 - Transaction type analysis
 - Amount correlation studies
 
-## 🎯 Key Features Breakdown
+##  Key Features Breakdown
 
 ### Machine Learning Integration
 ```typescript
@@ -145,7 +145,7 @@ VITE_API_BASE_URL=https://fraud-detection-backend-9ssq.onrender.com
 VITE_ML_API_URL=https://fraud-detection-mcw8.onrender.com
 ```
 
-## 🎨 Design System
+##  Design System
 
 ### Color Palette
 - **Primary**: Blue gradient (#3b82f6 to #8b5cf6)
@@ -165,7 +165,7 @@ VITE_ML_API_URL=https://fraud-detection-mcw8.onrender.com
 - Accessible design patterns
 - Modern card-based layouts
 
-## 📊 Analytics & Insights
+##  Analytics & Insights
 
 ### Fraud Detection Metrics
 - **Accuracy**: Overall model correctness
@@ -180,7 +180,7 @@ VITE_ML_API_URL=https://fraud-detection-mcw8.onrender.com
 - **Scatter Plots**: Correlation studies
 - **Area Charts**: Volume analysis
 
-## 🚀 Performance Optimizations
+##  Performance Optimizations
 
 - **Code Splitting**: Lazy loading of components
 - **Memoization**: React.memo and useMemo optimizations
@@ -188,14 +188,14 @@ VITE_ML_API_URL=https://fraud-detection-mcw8.onrender.com
 - **Image Optimization**: Responsive images and lazy loading
 - **CSS Optimization**: Tailwind CSS purging
 
-## 🔒 Security Features
+##  Security Features
 
 - **Input Validation**: Client-side form validation
 - **API Error Handling**: Comprehensive error management
 - **Type Safety**: TypeScript for runtime safety
 - **Secure API Calls**: Proper error handling and timeouts
 
-## 🎯 Future Enhancements
+##  Future Enhancements
 
 - [ ] Real-time WebSocket integration
 - [ ] Advanced filtering and search
@@ -206,7 +206,7 @@ VITE_ML_API_URL=https://fraud-detection-mcw8.onrender.com
 - [ ] API rate limiting visualization
 - [ ] Machine learning model comparison
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -214,11 +214,11 @@ VITE_ML_API_URL=https://fraud-detection-mcw8.onrender.com
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **Machine Learning Models**: Powered by advanced fraud detection algorithms
 - **UI/UX Inspiration**: Modern fintech and security applications
@@ -226,4 +226,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Built with ❤️ for fraud prevention and financial security**
+**Built with ❤ for fraud prevention and financial security**
