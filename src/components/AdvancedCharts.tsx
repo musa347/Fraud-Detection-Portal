@@ -17,7 +17,7 @@ import {
   Legend,
   ResponsiveContainer,
   ScatterChart,
-  Scatter
+  Scatter,
 } from 'recharts';
 import { 
   TrendingUp, 
@@ -26,14 +26,65 @@ import {
   Activity,
   Download,
   RefreshCw,
-  Calendar,
-  Filter
 } from 'lucide-react';
 import { getTransactionHistory } from '../services/api';
 import { useTheme } from '../contexts/ThemeContext';
 
+type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+interface Transaction {
+  id: string;
+  amount: number;
+  type: string;
+  riskLevel: RiskLevel;
+  fraudProbability: number;
+  flagged: boolean;
+  timestamp: string;
+}
+
+interface ChartData {
+  daily: Array<{ date: string; total: number; fraud: number; legitimate: number; avgRisk: number; totalAmount: number; fraudRate: number }>;
+  types: Array<{ name: string; total: number; fraud: number; value: number; fraudRate: number }>;
+  risks: Array<{ name: string; value: number; color: string }>;
+  amounts: Array<{ name: string; min: number; max: number; count: number; fraud: number; fraudRate: number }>;
+  scatter: Array<{ amount: number; fraudProbability: number; type: string; flagged: boolean }>;
+}
+
+interface DailyStats {
+  [key: string]: {
+    date: string;
+    total: number;
+    fraud: number;
+    legitimate: number;
+    avgRisk: number;
+    totalAmount: number;
+  };
+}
+
+interface TypeStats {
+  [key: string]: {
+    name: string;
+    total: number;
+    fraud: number;
+    value: number;
+  };
+}
+
+interface RiskStats {
+  LOW: { name: string; value: number; color: string };
+  MEDIUM: { name: string; value: number; color: string };
+  HIGH: { name: string; value: number; color: string };
+  CRITICAL: { name: string; value: number; color: string };
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{ name: string; value: number | string; color: string }>;
+  label?: string;
+}
+
 const AdvancedCharts: React.FC = () => {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<ChartData>({ daily: [], types: [], risks: [], amounts: [], scatter: [] });
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('7d');
   const [chartType, setChartType] = useState('trend');
@@ -55,8 +106,7 @@ const AdvancedCharts: React.FC = () => {
     }
   };
 
-  const processDataForCharts = (transactions: any[]) => {
-    // Process data for different chart types
+  const processDataForCharts = (transactions: Transaction[]): ChartData => {
     const dailyData = processDailyTrends(transactions);
     const typeData = processTransactionTypes(transactions);
     const riskData = processRiskLevels(transactions);
@@ -67,12 +117,12 @@ const AdvancedCharts: React.FC = () => {
       types: typeData,
       risks: riskData,
       amounts: amountData,
-      scatter: processScatterData(transactions)
+      scatter: processScatterData(transactions),
     };
   };
 
-  const processDailyTrends = (transactions: any[]) => {
-    const dailyStats = {};
+  const processDailyTrends = (transactions: Transaction[]) => {
+    const dailyStats: DailyStats = {};
     
     transactions.forEach(tx => {
       const date = new Date(tx.timestamp).toLocaleDateString();
@@ -83,7 +133,7 @@ const AdvancedCharts: React.FC = () => {
           fraud: 0,
           legitimate: 0,
           avgRisk: 0,
-          totalAmount: 0
+          totalAmount: 0,
         };
       }
       
@@ -99,15 +149,15 @@ const AdvancedCharts: React.FC = () => {
       dailyStats[date].avgRisk += tx.fraudProbability;
     });
     
-    return Object.values(dailyStats).map((day: any) => ({
+    return Object.values(dailyStats).map((day) => ({
       ...day,
       avgRisk: day.avgRisk / day.total,
-      fraudRate: (day.fraud / day.total) * 100
+      fraudRate: (day.fraud / day.total) * 100,
     })).slice(-7);
   };
 
-  const processTransactionTypes = (transactions: any[]) => {
-    const typeStats = {};
+  const processTransactionTypes = (transactions: Transaction[]) => {
+    const typeStats: TypeStats = {};
     
     transactions.forEach(tx => {
       if (!typeStats[tx.type]) {
@@ -115,7 +165,7 @@ const AdvancedCharts: React.FC = () => {
           name: tx.type,
           total: 0,
           fraud: 0,
-          value: 0
+          value: 0,
         };
       }
       
@@ -127,18 +177,18 @@ const AdvancedCharts: React.FC = () => {
       }
     });
     
-    return Object.values(typeStats).map((type: any) => ({
+    return Object.values(typeStats).map((type) => ({
       ...type,
-      fraudRate: (type.fraud / type.total) * 100
+      fraudRate: (type.fraud / type.total) * 100,
     }));
   };
 
-  const processRiskLevels = (transactions: any[]) => {
-    const riskStats = {
+  const processRiskLevels = (transactions: Transaction[]) => {
+    const riskStats: RiskStats = {
       LOW: { name: 'Low Risk', value: 0, color: '#10b981' },
       MEDIUM: { name: 'Medium Risk', value: 0, color: '#f59e0b' },
       HIGH: { name: 'High Risk', value: 0, color: '#f97316' },
-      CRITICAL: { name: 'Critical Risk', value: 0, color: '#ef4444' }
+      CRITICAL: { name: 'Critical Risk', value: 0, color: '#ef4444' },
     };
     
     transactions.forEach(tx => {
@@ -148,13 +198,13 @@ const AdvancedCharts: React.FC = () => {
     return Object.values(riskStats);
   };
 
-  const processAmountDistribution = (transactions: any[]) => {
-    const ranges = [
+  const processAmountDistribution = (transactions: Transaction[]) => {
+    const ranges: Array<{ name: string; min: number; max: number; count: number; fraud: number }> = [
       { name: '$0-1K', min: 0, max: 1000, count: 0, fraud: 0 },
       { name: '$1K-5K', min: 1000, max: 5000, count: 0, fraud: 0 },
       { name: '$5K-10K', min: 5000, max: 10000, count: 0, fraud: 0 },
       { name: '$10K-25K', min: 10000, max: 25000, count: 0, fraud: 0 },
-      { name: '$25K+', min: 25000, max: Infinity, count: 0, fraud: 0 }
+      { name: '$25K+', min: 25000, max: Infinity, count: 0, fraud: 0 },
     ];
     
     transactions.forEach(tx => {
@@ -167,32 +217,31 @@ const AdvancedCharts: React.FC = () => {
     
     return ranges.map(range => ({
       ...range,
-      fraudRate: range.count > 0 ? (range.fraud / range.count) * 100 : 0
+      fraudRate: range.count > 0 ? (range.fraud / range.count) * 100 : 0,
     }));
   };
 
-  const processScatterData = (transactions: any[]) => {
+  const processScatterData = (transactions: Transaction[]) => {
     return transactions.map(tx => ({
       amount: tx.amount,
       fraudProbability: tx.fraudProbability * 100,
       type: tx.type,
-      flagged: tx.flagged
+      flagged: tx.flagged,
     }));
   };
 
   const exportChart = () => {
-    // Implementation for exporting charts
     console.log('Exporting chart data...');
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
         <div className={`p-3 rounded-lg shadow-lg border ${
           isDark ? 'bg-gray-800 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-800'
         }`}>
           <p className="font-semibold">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }}>
               {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
             </p>
@@ -208,7 +257,7 @@ const AdvancedCharts: React.FC = () => {
       <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
         />
       </div>
@@ -286,7 +335,7 @@ const AdvancedCharts: React.FC = () => {
               { id: 'trend', label: 'Fraud Trends', icon: TrendingUp },
               { id: 'types', label: 'Transaction Types', icon: BarChart3 },
               { id: 'risk', label: 'Risk Distribution', icon: PieChartIcon },
-              { id: 'amounts', label: 'Amount Analysis', icon: Activity }
+              { id: 'amounts', label: 'Amount Analysis', icon: Activity },
             ].map((tab) => (
               <motion.button
                 key={tab.id}
@@ -404,7 +453,7 @@ const AdvancedCharts: React.FC = () => {
                   Amount vs Fraud Probability
                 </h3>
                 <ResponsiveContainer width="100%" height={300}>
-                  <ScatterChart data={data.scatter}>
+                  <ScatterChart>
                     <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} />
                     <XAxis 
                       type="number" 
@@ -421,7 +470,7 @@ const AdvancedCharts: React.FC = () => {
                     <Tooltip content={<CustomTooltip />} />
                     <Scatter 
                       name="Transactions" 
-                      dataKey="fraudProbability" 
+                      data={data.scatter}
                       fill="#8884d8"
                     />
                   </ScatterChart>
