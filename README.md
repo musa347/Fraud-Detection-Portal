@@ -49,8 +49,8 @@ A cutting-edge, AI-powered fraud detection portal built with React, TypeScript, 
 - **React Router** - Client-side routing
 
 ### Backend Integration
-- **Spring Boot API**: `https://fraud-detection-backend-9ssq.onrender.com`
-- **FastAPI ML Service**: `https://fraud-detection-mcw8.onrender.com`
+- **Spring Boot API**: 
+- **FastAPI ML Service**: 
 - **RESTful APIs**: Clean API integration with error handling
 
 ### Development Tools
@@ -137,13 +137,6 @@ interface FraudResult {
 The application connects to two main services:
 - **Spring Boot Backend**: Handles transaction processing and scoring
 - **FastAPI ML Service**: Provides machine learning model predictions
-
-### Environment Variables
-Create a `.env` file for custom configuration:
-```env
-VITE_API_BASE_URL=https://fraud-detection-backend-9ssq.onrender.com
-VITE_ML_API_URL=https://fraud-detection-mcw8.onrender.com
-```
 
 ##  Design System
 
